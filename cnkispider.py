@@ -84,7 +84,7 @@ def get_topic_abstracts(topic, page_nums=10, filepath='./'):
                 button.click()
                 time.sleep(1)
                 driver.switch_to.window(driver.window_handles[1])
-                if is_Chinese(tmp_title):# and tmp_papertype not in ['硕士', '博士']:
+                if is_Chinese(tmp_title):
                     time.sleep(1)
                     try:
                         tmp_abstract = get_abstract(driver, abstract_path)
