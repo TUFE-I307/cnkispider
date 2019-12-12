@@ -47,19 +47,14 @@ def input_verification(driver, veri_path, veri_btn_path):
     else:
         return False
 
-def get_topic_abstracts(topic, page_nums=10):
+def get_topic_abstracts(topic, page_nums=10, filepath='./'):
     abstract_path = '//div[@id="mainArea"]/div[@class="wxmain"]/div[@class="wxInfo"]/div[@class="wxBaseinfo"]/p[1]/span[@id="ChDivSummary"]'
     input_path = '//div[@class="searchmain"]/div[@class="search-form"]/div[@class="input-box"]/input[@class="search-input"]'
     search_button_path = '//div[@class="searchmain"]/div[@class="search-form"]/div[@class="input-box"]/input[@class="search-btn"]'
     page_path = '/html/body/form/table/tbody/tr[3]/td/table/tbody/tr/td/div/a[last()]'
     url = 'https://www.cnki.net/'
 
-    # driver = webdriver.Chrome(executable_path='chromedriver')
     driver = webdriver.Firefox(executable_path='geckodriver')
-    # driver = webdriver.PhantomJS('phantomjs')
-    # chrome_options = webdriver.ChromeOptions()
-    # chrome_options.add_argument('--headless')
-    # driver = webdriver.Chrome(chrome_options=chrome_options)
 
     driver.get(url)
     driver.find_element_by_xpath(input_path).clear()
@@ -108,7 +103,6 @@ def get_topic_abstracts(topic, page_nums=10):
                     print('%s-%d %s[%s] %s'%(topic, count, tmp_title, tmp_papertype, tmp_author))
                 driver.close()
                 driver.switch_to.window(driver.window_handles[0])
-                # driver.switch_to.frame('iframeResult')
                 time.sleep(2)
             driver.find_element_by_xpath(page_path).click()
             page_nums -= 1
@@ -117,11 +111,10 @@ def get_topic_abstracts(topic, page_nums=10):
     except:
         driver.quit()
     res = np.array(res)
-    with open('/home/qin/Codes/2020/Data/papers/20191121/%s.csv' % topic, 'a', newline='', encoding='utf-8') as f:
+    with open(filepath + '%s.csv' % topic, 'a', newline='', encoding='utf-8') as f:
         writer = csv.writer(f)
         writer.writerows(res)
         f.close()
 
 if __name__ == '__main__':
-    # for i in ['社区发现', '主题识别', '关键词抽取']:
-    get_topic_abstracts('空间计量', 50)
+    get_topic_abstracts('网络爬虫', 50, 'E://')
